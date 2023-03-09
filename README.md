@@ -1,6 +1,6 @@
 # logistic
 该项目是一起货运吧小程序后台源码，目前小程序已经上线，该项目由本人一个人开发，有需要的小伙伴可以参考，该项目的特色是可以集成多语言，可以随便切换司机和货主角色，需要前端项目的可以查看
-logistic-res项目，觉得有用点个star吧，如果需要帮助可以添加v sualpha1
+https://github.com/sualpha/logistic-res.git项目，觉得有用点个star吧，如果需要帮助可以添加v sualpha1
 
 ![微信图片_20230309141619](https://user-images.githubusercontent.com/30691840/223936826-1f355892-91ce-49ee-b4b7-0c57759e1213.jpg)
 ![微信图片_20230309141627](https://user-images.githubusercontent.com/30691840/223936845-9816e816-5532-45e0-95b6-c1de1e8a6b70.jpg)
