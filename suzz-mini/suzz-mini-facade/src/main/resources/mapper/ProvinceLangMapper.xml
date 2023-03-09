@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.ProvinceLangMapper">
+
+  <cache type="com.suzz.platform.config.MybatisRedisCache" flushInterval="86400000"/>
+
+  <resultMap id="BaseResultMap" type="com.suzz.mini.domain.organization.ProvinceLang">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fk_province" jdbcType="INTEGER" property="fkProvince" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="lang" jdbcType="VARCHAR" property="lang" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fk_province, `name`, lang
+  </sql>
+
+  <select id="queryList" parameterType="com.suzz.mini.domain.condition.ProvinceLangCondition" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from province_lang
+    where fk_province in
+    <foreach collection="provinceIds" item="provinceId" open="(" close=")" separator=",">
+    #{provinceId}
+    </foreach>
+    and lang =#{lang}
+  </select>
+</mapper>

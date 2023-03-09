@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- 控制台的日志输出 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ApplicationExceptionFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %logger{5} - %msg%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/suzz/mini-facade-applicationException-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<append>true</append>
+		<prudent>false</prudent>
+	</appender>
+
+	<!-- 配置日志文件输出 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/suzz/mini-facade.log</file>
+		<encoder>
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %logger{5} - %msg%n</pattern>
+		</encoder>
+		<!-- 滚动策略 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				/suzz/mini-facade-%d{yyyy-MM-dd}.log.zip
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<append>true</append>
+		<prudent>false</prudent>
+	</appender>
+
+	<logger name="ApplicationException" additivity="true">
+		<level value="info" />
+		<appender-ref ref="ApplicationExceptionFile" />
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT"></appender-ref>
+		<appender-ref ref="FILE"></appender-ref>
+	</root>
+</configuration>

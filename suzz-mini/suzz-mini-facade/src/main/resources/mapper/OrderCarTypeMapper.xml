@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.OrderCarTypeMapper">
+  <resultMap id="BaseResultMap" type="com.suzz.mini.domain.OrderCarType">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fk_order" jdbcType="INTEGER" property="fkOrder" />
+    <result column="car_type" jdbcType="INTEGER" property="carType" />
+    <result column="car_name" jdbcType="VARCHAR" property="carName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fk_order, car_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_car_type
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="queryList" parameterType="com.suzz.mini.domain.condition.OrderCarTypeCondition" resultMap="BaseResultMap">
+    SELECT
+      a.id,
+      a.fk_order,
+      a.car_type,
+      d.name car_name
+    FROM order_car_type a
+      LEFT JOIN (
+      SELECT b.KEY, c.NAME
+      FROM
+          dictionary b
+          LEFT JOIN dictionary_lang c ON b.id = c.fk_dictionary
+      WHERE
+      b.CODE = 'car_type' ) d
+	ON a.car_type = d.`key`
+    where 1=1
+    <if test="orderId != null">
+      and fk_order = #{orderId,jdbcType=INTEGER}
+    </if>
+    <if test="orderIds != null">
+      and fk_order in
+      <foreach collection="orderIds" item="orderId" open="(" close=")" separator=",">
+        #{orderId}
+      </foreach>
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_car_type
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.suzz.mini.domain.OrderCarType" useGeneratedKeys="true">
+    insert into order_car_type (fk_order, car_type)
+    values (#{fkOrder,jdbcType=INTEGER}, #{carType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.suzz.mini.domain.OrderCarType" useGeneratedKeys="true">
+    insert into order_car_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fkOrder != null">
+        fk_order,
+      </if>
+      <if test="carType != null">
+        car_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fkOrder != null">
+        #{fkOrder,jdbcType=INTEGER},
+      </if>
+      <if test="carType != null">
+        #{carType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.suzz.mini.domain.OrderCarType">
+    update order_car_type
+    <set>
+      <if test="fkOrder != null">
+        fk_order = #{fkOrder,jdbcType=INTEGER},
+      </if>
+      <if test="carType != null">
+        car_type = #{carType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.suzz.mini.domain.OrderCarType">
+    update order_car_type
+    set fk_order = #{fkOrder,jdbcType=INTEGER},
+      car_type = #{carType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateValid" parameterType="com.suzz.mini.domain.OrderCarType">
+    delete from order_car_type  where fk_order = #{fkOrder,jdbcType=INTEGER}
+  </update>
+</mapper>

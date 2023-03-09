@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.suzz</groupId>
+    <artifactId>suzz-platform-start</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <description>we have a little dream</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.12.RELEASE</version>
+    </parent>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <fastjson.version>1.2.83</fastjson.version>
+        <mybatis-plus-spring-boot-starter.version>3.2.0</mybatis-plus-spring-boot-starter.version>
+        <pagehelper-spring-boot-starter.version>1.2.12</pagehelper-spring-boot-starter.version>
+        <druid-spring-boot-starter.version>1.1.20</druid-spring-boot-starter.version>
+        <dubbo-spring-boot.version>2.7.8</dubbo-spring-boot.version>
+        <hutool.version>5.4.7</hutool.version>
+        <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>
+        <curator-recipes.version>4.3.0</curator-recipes.version>
+        <redisson.version>3.12.5</redisson.version>
+        <spring-boot-admin-starter-client>2.1.6</spring-boot-admin-starter-client>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+    </properties>
+
+    <modules>
+        <module>suzz-api-start</module>
+        <module>suzz-facade-start</module>
+        <module>suzz-mgr-start</module>
+        <module>suzz-web-start</module>
+    </modules>
+</project>

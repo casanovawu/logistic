@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.OrderAuditMapper">
+    
+    <resultMap type="com.suzz.mini.domain.OrderAudit" id="OrderAuditResult">
+        <result property="id"    column="id"    />
+        <result property="fkOrder"    column="fk_order"    />
+        <result property="fkAuditUser"    column="fk_audit_user"    />
+        <result property="auditUserName"    column="audit_user_name"    />
+        <result property="status"    column="status"    />
+        <result property="rejectRemark"    column="reject_remark"    />
+        <result property="auditContent"    column="audit_content"    />
+    </resultMap>
+
+    <sql id="selectOrderAuditVo">
+        select id, fk_order, fk_audit_user, audit_user_name, status, reject_remark, audit_content from order_audit
+    </sql>
+
+    <select id="selectOrderAuditList" parameterType="com.suzz.mini.domain.OrderAudit" resultMap="OrderAuditResult">
+        <include refid="selectOrderAuditVo"/>
+        <where>  
+            <if test="fkOrder != null "> and fk_order = #{fkOrder}</if>
+            <if test="fkAuditUser != null "> and fk_audit_user = #{fkAuditUser}</if>
+            <if test="auditUserName != null  and auditUserName != ''"> and audit_user_name like concat('%', #{auditUserName}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="rejectRemark != null  and rejectRemark != ''"> and reject_remark = #{rejectRemark}</if>
+            <if test="auditContent != null  and auditContent != ''"> and audit_content = #{auditContent}</if>
+        </where>
+    </select>
+    
+    <select id="selectOrderAuditById" parameterType="Long" resultMap="OrderAuditResult">
+        <include refid="selectOrderAuditVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOrderAudit" parameterType="com.suzz.mini.domain.OrderAudit" useGeneratedKeys="true" keyProperty="id">
+        insert into order_audit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fkOrder != null">fk_order,</if>
+            <if test="fkAuditUser != null">fk_audit_user,</if>
+            <if test="auditUserName != null">audit_user_name,</if>
+            <if test="status != null">status,</if>
+            <if test="rejectRemark != null">reject_remark,</if>
+            <if test="auditContent != null">audit_content,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fkOrder != null">#{fkOrder},</if>
+            <if test="fkAuditUser != null">#{fkAuditUser},</if>
+            <if test="auditUserName != null">#{auditUserName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="rejectRemark != null">#{rejectRemark},</if>
+            <if test="auditContent != null">#{auditContent},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrderAudit" parameterType="com.suzz.mini.domain.OrderAudit">
+        update order_audit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fkOrder != null">fk_order = #{fkOrder},</if>
+            <if test="fkAuditUser != null">fk_audit_user = #{fkAuditUser},</if>
+            <if test="auditUserName != null">audit_user_name = #{auditUserName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="rejectRemark != null">reject_remark = #{rejectRemark},</if>
+            <if test="auditContent != null">audit_content = #{auditContent},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrderAuditById" parameterType="Long">
+        delete from order_audit where id = #{id}
+    </delete>
+
+    <delete id="deleteOrderAuditByIds" parameterType="String">
+        delete from order_audit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

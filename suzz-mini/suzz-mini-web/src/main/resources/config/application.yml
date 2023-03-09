@@ -1,0 +1,32 @@
+server:
+  port: 8092
+  servlet:
+    context-path: /mini/web
+dubbo:
+  application:
+    name: suzz-mini-web
+    version: 1.0
+    logger: slf4j
+    qos-enable: false
+    qos-port: 26105
+  protocol:
+    name: dubbo
+    port: 26005
+  registry:
+    protocol: zookeeper
+    file: dubbo-registry-mini-web.properties
+  consumer:
+    check: false
+  dropdown:
+    group: mini
+
+spring:
+  application:
+    name: suzz-mini-web
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+swagger:
+  enabled: true

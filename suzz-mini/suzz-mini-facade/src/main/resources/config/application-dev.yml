@@ -1,0 +1,30 @@
+info:
+  version: V20220430-DEV
+dubbo:
+  registry:
+    address: 127.0.0.1:2181
+    default: true
+  metadata-report:
+    address: zookeeper://127.0.0.1:2181
+spring:
+  datasource:
+    name: szwl-mini
+    url: jdbc:mysql://xxx.xxx.xxx.xxx:3306/suzz-mini?characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: xxx
+    password: xxx
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+  boot:
+    admin:
+      client:
+        enabled: false
+logging:
+  level:
+    com:
+      suzz:
+        mini:
+          mapper: debug
+
+

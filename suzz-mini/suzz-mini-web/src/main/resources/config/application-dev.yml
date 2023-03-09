@@ -1,0 +1,18 @@
+info:
+  version: V20220430-DEV
+dubbo:
+  registry:
+    address: 127.0.0.1:2181
+    default: true
+spring:
+  boot:
+    admin:
+      client:
+        enabled: false
+  servlet:
+    multipart:
+      location: E:\imageData
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+

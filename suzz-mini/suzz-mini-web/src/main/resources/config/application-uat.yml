@@ -1,0 +1,30 @@
+info:
+  version: V20221016-UAT
+dubbo:
+  registry:
+    address: 123.60.166.131:2181
+    default: true
+  metadata-report:
+    address: zookeeper://123.60.166.131:2181
+logging:
+  file: /suzz/mini-web.log
+spring:
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: "http://123.60.166.131:8082"
+        instance:
+          name: suzz-mini-web
+          service-base-url: http://1.116.142.225/:${server.port}
+        username: admin
+        password: weimeng
+  servlet:
+    multipart:
+      location: /suzz/imageData
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+
+
+

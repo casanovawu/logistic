@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.MiniUserMapper">
+  <resultMap id="BaseResultMap" type="com.suzz.mini.domain.MiniUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="sex" jdbcType="BOOLEAN" property="sex" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="union_id" jdbcType="VARCHAR" property="unionId" />
+    <result column="language" jdbcType="VARCHAR" property="language" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="head_pic" jdbcType="VARCHAR" property="headPic" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sex, user_name, phone, type,open_id, union_id, `language`, introduce, head_pic
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mini_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mini_user
+    where open_id = #{openId}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mini_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.suzz.mini.domain.MiniUser" useGeneratedKeys="true">
+    insert into mini_user (sex, user_name, phone, 
+      open_id, union_id, `language`, type,
+      introduce, head_pic, create_time, 
+      modify_time, fk_create_user, fk_modify_user, 
+      is_valid)
+    values (#{sex,jdbcType=BOOLEAN}, #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, #{language,jdbcType=VARCHAR}, #{type},
+      #{introduce,jdbcType=VARCHAR}, #{headPic,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{fkCreateUser,jdbcType=INTEGER}, #{fkModifyUser,jdbcType=INTEGER}, 
+      #{isValid,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.suzz.mini.domain.MiniUser" useGeneratedKeys="true">
+    insert into mini_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="unionId != null">
+        union_id,
+      </if>
+      <if test="language != null">
+        `language`,
+      </if>
+      <if test="introduce != null">
+        introduce,
+      </if>
+      <if test="headPic != null">
+        head_pic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sex != null">
+        #{sex,jdbcType=BOOLEAN},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="unionId != null">
+        #{unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null">
+        #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="headPic != null">
+        #{headPic,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.suzz.mini.domain.MiniUser">
+    update mini_user
+    <set>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=BOOLEAN},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null">
+        union_id = #{unionId,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null">
+        `language` = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="headPic != null">
+        head_pic = #{headPic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.suzz.mini.domain.MiniUser">
+    update mini_user
+    set sex = #{sex,jdbcType=BOOLEAN},
+      user_name = #{userName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      type = type,
+      union_id = #{unionId,jdbcType=VARCHAR},
+      `language` = #{language,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      head_pic = #{headPic,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

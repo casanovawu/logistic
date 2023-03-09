@@ -1,0 +1,33 @@
+info:
+  version: V20221230-PRD
+dubbo:
+  registry:
+    address: xxx.xxx.xxx.xxx:2181
+    default: true
+  metadata-report:
+    address: zookeeper://xxx.xxx.xxx.xxx:2181
+spring:
+  datasource:
+    name: szwl-mini
+    url: jdbc:mysql://127.0.0.1:3306/suzz-mini?characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: xxx
+    password: xxx
+  redis:
+    host: xxx.xxx.xxx.xxx
+    port: 6379
+    database: 1
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: "http://xxx.xxx.xxx.xxx:8082"
+        instance:
+          name: suzz-mini-facade
+          service-base-url: http://xxx.xxx.xxx.xxx:${server.port}
+        username: admin
+        password: weimeng
+logging:
+  file:
+    name: /suzz/mini-facade.log
+
+

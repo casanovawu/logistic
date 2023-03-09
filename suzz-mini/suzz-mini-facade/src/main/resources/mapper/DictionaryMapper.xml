@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.DictionaryMapper">
+
+    <cache type="com.suzz.platform.config.MybatisRedisCache" flushInterval="86400000"/>
+
+    <select id="queryList" parameterType="com.suzz.mini.domain.condition.DictionaryCondition"
+            resultType="com.suzz.mini.domain.Dictionary">
+        select d.code,
+               d.key,
+               dl.name as 'dictionaryLang.name'
+        from dictionary d
+                 Left join dictionary_lang dl on d.id = dl.fk_dictionary
+        where d.code = #{code} and dl.lang = #{lang}
+    </select>
+</mapper>

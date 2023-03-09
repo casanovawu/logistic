@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.OrderCollectionMapper">
+
+  <select id="queryInValidData" parameterType="com.suzz.mini.domain.OrderCollection" resultType="com.suzz.mini.domain.OrderCollection">
+    select
+      id
+    from order_collection
+    where fk_order = #{orderId} and fk_mini_user =#{miniUserId}
+  </select>
+
+  <update id="updateValid" parameterType="com.suzz.mini.domain.OrderCollection">
+    update order_collection set is_valid= 1 where fk_order = #{orderId} and fk_mini_user =#{miniUserId}
+  </update>
+</mapper>

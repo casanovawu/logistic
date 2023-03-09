@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.OrderMapper">
+    <resultMap id="BaseResultMap" type="com.suzz.mini.domain.Order">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="fk_mini_user" jdbcType="INTEGER" property="fkMiniUser"/>
+        <result column="user_name" jdbcType="VARCHAR" property="miniUser.userName"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="departure_area_code" jdbcType="VARCHAR" property="departureAreaCode"/>
+        <result column="departure_address_name" jdbcType="VARCHAR" property="departureAddressName"/>
+        <result column="arrive_area_code" jdbcType="VARCHAR" property="arriveAreaCode"/>
+        <result column="arrive_address_name" jdbcType="VARCHAR" property="arriveAddressName"/>
+        <result column="use_start_date" jdbcType="DATE" property="useStartDate"/>
+        <result column="min_ton" jdbcType="INTEGER" property="minTon"/>
+        <result column="max_ton" jdbcType="INTEGER" property="maxTon"/>
+        <result column="price_style" jdbcType="INTEGER" property="priceStyle"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="goods_info" jdbcType="VARCHAR" property="goodsInfo"/>
+        <result column="loadAddress" jdbcType="VARCHAR" property="load_address"/>
+        <result column="unloadAddress" jdbcType="VARCHAR" property="unload_address"/>
+        <result column="isLoadLocation" jdbcType="INTEGER" property="is_load_location"/>
+        <result column="isUnloadLocation" jdbcType="INTEGER" property="is_unload_location"/>
+        <result column="loadLatitude" jdbcType="VARCHAR" property="load_latitude"/>
+        <result column="unloadLatitude" jdbcType="VARCHAR" property="unload_latitude"/>
+        <result column="loadLongitude" jdbcType="VARCHAR" property="load_longitude"/>
+        <result column="unloadLongitude" jdbcType="VARCHAR" property="unload_longitude"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="is_valid" jdbcType="BOOLEAN" property="isValid"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, fk_mini_user, `status`, departure_area_code, arrive_area_code, use_start_date,
+        min_ton, max_ton, price_style, price, goods_info, create_time, modify_time, is_valid
+    </sql>
+
+    <sql id="selectOrderVo">
+        select id, fk_mini_user, status, departure_area_code, arrive_area_code, use_start_date, min_ton, max_ton, price_style, price, goods_info from `order`
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select o.id, o.fk_mini_user, o.status, o.departure_area_code, o.arrive_area_code, o.use_start_date,
+               o.is_load_location,o.is_unload_location,o.load_address,o.load_longitude,o.load_latitude,o.unload_address,o.unload_longitude,o.unload_latitude,
+        o.min_ton, o.max_ton, o.price_style, o.price, o.goods_info, o.create_time, o.modify_time, o.is_valid, m.user_name,ud.all_name departure_address_name, ua.all_name arrive_address_name
+        from `order` o
+        left join mini_user m on o.fk_mini_user = m.id
+        left join  v_province_city_area ud on o.departure_area_code = ud.all_code
+        left join  v_province_city_area ua on o.arrive_area_code = ua.all_code
+		where o.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryList" parameterType="com.suzz.mini.domain.condition.OrderQueryCondition" resultType="com.suzz.mini.domain.Order">
+        select
+            o.id as id,
+            o.publish_time as publishTime,
+            o.fk_mini_user as fkMiniUser,
+            o.status as status,
+            o.departure_area_code as departureAreaCode,
+            o.arrive_area_code as arriveAreaCode,
+            o.use_start_date as useStartDate,
+            o.min_ton as minTon,
+            o.max_ton as maxTon,
+            o.price_style as priceStyle,
+            o.price as price,
+            o.goods_info as goodsInfo,
+            ud.all_name as departureAddressName,
+            ua.all_name as arriveAddressName,
+            mu.user_name as `miniUser.userName`,
+            mu.head_pic as `miniUser.headPic`
+        from `order` o
+        inner join mini_user mu on mu.id =o.fk_mini_user
+        left join v_province_city_area ud on o.departure_area_code = ud.all_code
+        left join v_province_city_area ua on o.arrive_area_code = ua.all_code
+        <if test="isCollection ==1 ">
+            inner join order_collection oc on oc.fk_order = o.id and oc.is_valid= 1
+        </if>
+        where o.is_valid = 1
+        <if test="departureAreaCode != null ">and o.departure_area_code = #{departureAreaCode}</if>
+        <if test="arriveAreaCode != null ">and o.arrive_area_code = #{arriveAreaCode}</if>
+        <if test="useStartDate != null ">and o.use_start_date >= #{useStartDate}</if>
+        <if test="useEndDate != null ">and o.use_start_date &lt;= #{useEndDate}</if>
+        <if test="minTon != null ">and o.min_ton = #{minTon}</if>
+        <if test="maxTon != null ">and o.max_ton = #{maxTon}</if>
+        <if test="minPrice != null ">and o.price >= #{minPrice}</if>
+        <if test="maxPrice != null ">and o.price &lt;= #{maxPrice}</if>
+        <if test="miniUserId != null and isCollection !=1 ">and o.fk_mini_user = #{miniUserId}</if>
+        <if test="isCollection ==1 ">and oc.fk_mini_user = #{miniUserId}</if>
+        <if test="lang != null ">and o.language = #{lang}</if>
+        <if test="status != null ">and o.status = #{status}</if>
+        <if test="keyword != null and keyword!=''">and o.goods_info like concat('%', #{keyword}, '%')</if>
+        <if test="sort =='desc' ">order by o.publish_time desc</if>
+        <if test="sort =='asc' ">order by o.publish_time asc</if>
+    </select>
+
+    <select id="selectOrderList" parameterType="com.suzz.mini.domain.Order" resultMap="BaseResultMap">
+        select o.id, o.fk_mini_user, o.status, o.departure_area_code, o.arrive_area_code, o.use_start_date,
+        o.min_ton, o.max_ton, o.price_style, o.price, o.goods_info, o.create_time, o.modify_time, o.is_valid, m.user_name,ud.all_name departure_address_name, ua.all_name
+        arrive_address_name
+        from `order` o
+        left join mini_user m on o.fk_mini_user = m.id
+        left join v_province_city_area ud on o.departure_area_code = ud.all_code
+        left join v_province_city_area ua on o.arrive_area_code = ua.all_code
+        <where>
+            <if test="fkMiniUser != null ">and o.fk_mini_user = #{fkMiniUser}</if>
+            <if test="status != null ">and o.status = #{status}</if>
+            <if test="departureAreaCode != null  and departureAreaCode != ''">and o.departure_area_code =
+                #{departureAreaCode}
+            </if>
+            <if test="arriveAreaCode != null  and arriveAreaCode != ''">and o.arrive_area_code = #{arriveAreaCode}</if>
+            <if test="useStartDate != null ">and o.use_start_date = #{useStartDate}</if>
+            <if test="minTon != null ">and o.min_ton = #{minTon}</if>
+            <if test="maxTon != null ">and o.max_ton = #{maxTon}</if>
+            <if test="priceStyle != null ">and o.price_style = #{priceStyle}</if>
+            <if test="price != null ">and o.price = #{price}</if>
+            <if test="goodsInfo != null  and goodsInfo != ''">and o.goods_info = #{goodsInfo}</if>
+            <if test="modifyTime != null ">and o.modify_time = #{modifyTime}</if>
+            <if test="isValid != null ">and o.is_valid = #{isValid}</if>
+        </where>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from `order` where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.suzz.mini.domain.Order" useGeneratedKeys="true">
+        insert into `order` (fk_mini_user, `status`, departure_area_code, arrive_area_code, use_start_date, min_ton,publish_time,language,
+        max_ton, price_style, price, is_load_location,is_unload_location,load_address,load_longitude,load_latitude,unload_address,unload_longitude,unload_latitude,
+        goods_info, create_time, modify_time, is_valid
+        )
+        values (#{fkMiniUser,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{departureAreaCode,jdbcType=VARCHAR},
+        #{arriveAreaCode,jdbcType=VARCHAR}, #{useStartDate,jdbcType=DATE}, #{minTon,jdbcType=INTEGER},#{publishTime},#{language},
+        #{maxTon,jdbcType=INTEGER}, #{priceStyle,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL},#{isLoadLocation},#{isUnloadLocation},#{loadAddress},#{loadLongitude},#{loadLatitude},#{unloadAddress},#{unloadLongitude},#{unloadLatitude},
+        #{goodsInfo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BOOLEAN}
+        )
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.suzz.mini.domain.Order">
+        update `order`
+        <set>
+            <if test="fkMiniUser != null">
+                fk_mini_user = #{fkMiniUser,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="departureAreaCode != null">
+                departure_area_code = #{departureAreaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="arriveAreaCode != null">
+                arrive_area_code = #{arriveAreaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="useStartDate != null">
+                use_start_date = #{useStartDate,jdbcType=DATE},
+            </if>
+            <if test="minTon != null">
+                min_ton = #{minTon,jdbcType=INTEGER},
+            </if>
+            <if test="maxTon != null">
+                max_ton = #{maxTon,jdbcType=INTEGER},
+            </if>
+            <if test="priceStyle != null">
+                price_style = #{priceStyle,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsInfo != null">
+                goods_info = #{goodsInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="loadLatitude != null">
+                load_latitude = #{loadLatitude},
+            </if>
+            <if test="unloadLongitude != null">
+                unload_longitude = #{unloadLongitude},
+            </if>
+            <if test="loadLongitude != null">
+                load_longitude = #{loadLongitude},
+            </if>
+            <if test="unloadLatitude != null">
+                unload_latitude = #{unloadLatitude},
+            </if>
+            <if test="loadAddress != null">
+                load_address = #{loadAddress},
+            </if>
+            <if test="unloadAddress != null">
+                unload_address = #{unloadAddress},
+            </if>
+            <if test="isLoadLocation != null">
+                is_load_location = #{isLoadLocation},
+            </if>
+            <if test="isUnloadLocation != null">
+                is_unload_location = #{isUnloadLocation},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid,jdbcType=BOOLEAN},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.suzz.mini.domain.Order">
+        update `order`
+        set fk_mini_user = #{fkMiniUser,jdbcType=INTEGER},
+        `status` = #{status,jdbcType=INTEGER},
+        departure_area_code = #{departureAreaCode,jdbcType=VARCHAR},
+        arrive_area_code = #{arriveAreaCode,jdbcType=VARCHAR},
+        use_start_date = #{useStartDate,jdbcType=DATE},
+        min_ton = #{minTon,jdbcType=INTEGER},
+        max_ton = #{maxTon,jdbcType=INTEGER},
+        price_style = #{priceStyle,jdbcType=INTEGER},
+        price = #{price,jdbcType=DECIMAL},
+        goods_info = #{goodsInfo,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+        is_valid = #{isValid,jdbcType=BOOLEAN}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateStatusMoreThanFiveDay" >
+        update `order`
+        set
+            `status` = 3,
+            modify_time = now()
+        where status = 2 and  DATE_FORMAT( DATE_SUB( NOW( ),interval  5 day), '%Y-%m-%d %H:%i:%s' ) > publish_time
+    </update>
+
+    <update id="audit" parameterType="java.util.Map">
+        update `order`
+        set `status` = #{newStatus,jdbcType=INTEGER},
+        modify_time = current_timestamp
+        where id = #{id,jdbcType=INTEGER} and `status` = #{oldStatus,jdbcType=INTEGER}
+    </update>
+</mapper>

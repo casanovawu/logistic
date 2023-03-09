@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.MiniUserFocusMapper">
+
+  <select id="queryInValidData" parameterType="com.suzz.mini.domain.MiniUserFocus" resultType="com.suzz.mini.domain.MiniUserFocus">
+    select
+      id
+    from mini_user_focus
+    where fk_mini_user = #{miniUserId} and fk_mini_user_focus =#{miniUserFocusId}
+  </select>
+
+  <update id="updateValid" parameterType="com.suzz.mini.domain.MiniUserFocus">
+    update mini_user_focus set is_valid= 1 where fk_mini_user = #{miniUserId} and fk_mini_user_focus =#{miniUserFocusId}
+  </update>
+</mapper>

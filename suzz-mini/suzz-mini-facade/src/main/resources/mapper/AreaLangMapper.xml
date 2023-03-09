@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.AreaLangMapper">
+
+  <cache type="com.suzz.platform.config.MybatisRedisCache" flushInterval="86400000"/>
+
+  <resultMap id="BaseResultMap" type="com.suzz.mini.domain.organization.AreaLang">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fk_area" jdbcType="INTEGER" property="fkArea" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="lang" jdbcType="VARCHAR" property="lang" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fk_area, `name`, lang
+  </sql>
+  <select id="queryList" parameterType="com.suzz.mini.domain.condition.AreaLangCondition" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from area_lang
+    where fk_area in
+    <foreach collection="areaIds" item="areaId" open="(" close=")" separator=",">
+      #{areaId}
+    </foreach>
+    and lang =#{lang}
+  </select>
+
+</mapper>

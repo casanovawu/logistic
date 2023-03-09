@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.OrderLookMapper">
+
+  <select id="queryLock" parameterType="com.suzz.mini.domain.OrderLook" resultType="com.suzz.mini.domain.OrderLook">
+    select
+      id as id,
+      num as num
+    from order_look
+    where fk_order = #{orderId} and fk_mini_user =#{miniUserId} and look_time = DATE_FORMAT( NOW( ), '%Y-%m-%d' ) for update
+  </select>
+</mapper>

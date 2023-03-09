@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suzz.mini.mapper.ExceptionMapper">
+
+    <select id="queryList" parameterType="com.suzz.mini.domain.condition.ExceptionCondition"
+            resultType="com.suzz.mini.domain.Exception">
+        select e.code,
+               el.name as 'exceptionLang.name'
+        from exception e
+                 Left join exception_lang el on e.id = el.fk_exception
+        where e.code = #{code}
+          and el.lang = #{lang}
+    </select>
+</mapper>
